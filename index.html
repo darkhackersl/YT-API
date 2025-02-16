@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Test Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .endpoint { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+    .response { margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 3px; }
+    .quality-select { margin-left: 10px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>API Test Page</h1>
+
+  <!-- YouTube Search -->
+  <div class="endpoint">
+    <h2>YouTube Search</h2>
+    <form id="youtubeSearchForm">
+      <label>Search Query:</label>
+      <input type="text" id="youtubeSearchQuery" required>
+      <button type="submit">Search</button>
+    </form>
+    <div class="response" id="youtubeSearchResponse"></div>
+  </div>
+
+  <!-- YouTube MP3 Download -->
+  <div class="endpoint">
+    <h2>YouTube MP3 Download</h2>
+    <form id="youtubeMp3Form">
+      <label>Video URL:</label>
+      <input type="text" id="youtubeMp3Url" required>
+      <label>Quality:</label>
+      <select id="youtubeMp3Quality" class="quality-select">
+        <option value="64">64kbps</option>
+        <option value="96">96kbps</option>
+        <option value="128" selected>128kbps</option>
+        <option value="192">192kbps</option>
+        <option value="256">256kbps</option>
+        <option value="320">320kbps</option>
+      </select>
+      <button type="submit">Download MP3</button>
+    </form>
+    <div class="response" id="youtubeMp3Response"></div>
+  </div>
+
+  <!-- YouTube MP4 Download -->
+  <div class="endpoint">
+    <h2>YouTube MP4 Download</h2>
+    <form id="youtubeMp4Form">
+      <label>Video URL:</label>
+      <input type="text" id="youtubeMp4Url" required>
+      <label>Quality:</label>
+      <select id="youtubeMp4Quality" class="quality-select">
+        <option value="360">360p</option>
+        <option value="480">480p</option>
+        <option value="720">720p</option>
+        <option value="1080">1080p</option>
+        <option value="1440">1440p</option>
+      </select>
+      <button type="submit">Download MP4</button>
+    </form>
+    <div class="response" id="youtubeMp4Response"></div>
+  </div>
+
+  <!-- YouTube Transcript -->
+  <div class="endpoint">
+    <h2>YouTube Transcript</h2>
+    <form id="youtubeTranscriptForm">
+      <label>Video URL:</label>
+      <input type="text" id="youtubeTranscriptUrl" required>
+      <button type="submit">Get Transcript</button>
+    </form>
+    <div class="response" id="youtubeTranscriptResponse"></div>
+  </div>
+
+  <!-- YouTube Advanced Download -->
+  <div class="endpoint">
+    <h2>YouTube Advanced Download</h2>
+    <form id="youtubeAdvancedForm">
+      <label>Video URL:</label>
+      <input type="text" id="youtubeAdvancedUrl" required>
+      <label>Format:</label>
+      <select id="youtubeAdvancedFormat" class="quality-select">
+        <option value="default">Default</option>
+        <option value="64">64kbps (Audio)</option>
+        <option value="128">128kbps (Audio)</option>
+        <option value="320">320kbps (Audio)</option>
+        <option value="360">360p (Video)</option>
+        <option value="720">720p (Video)</option>
+        <option value="1080">1080p (Video)</option>
+      </select>
+      <button type="submit">Download</button>
+    </form>
+    <div class="response" id="youtubeAdvancedResponse"></div>
+  </div>
+
+  <!-- YouTube Channel Info -->
+  <div class="endpoint">
+    <h2>YouTube Channel Info</h2>
+    <form id="youtubeChannelForm">
+      <label>Channel ID:</label>
+      <input type="text" id="youtubeChannelId" required>
+      <button type="submit">Get Channel Info</button>
+    </form>
+    <div class="response" id="youtubeChannelResponse"></div>
+  </div>
+
+</div>
+
+<script>
+  // Helper function to display responses
+  function displayResponse(elementId, data) {
+    document.getElementById(elementId).textContent = JSON.stringify(data, null, 2);
+  }
+
+  // YouTube Search
+  document.getElementById('youtubeSearchForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = document.getElementById('youtubeSearchQuery').value;
+    const response = await fetch(`/youtube/search?q=${encodeURIComponent(query)}`);
+    const data = await response.json();
+    displayResponse('youtubeSearchResponse', data);
+  });
+
+  // YouTube MP3 Download
+  document.getElementById('youtubeMp3Form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('youtubeMp3Url').value;
+    const quality = document.getElementById('youtubeMp3Quality').value;
+    const response = await fetch(`/youtube/mp3?link=${encodeURIComponent(url)}&quality=${quality}`);
+    const data = await response.json();
+    displayResponse('youtubeMp3Response', data);
+  });
+
+  // YouTube MP4 Download
+  document.getElementById('youtubeMp4Form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('youtubeMp4Url').value;
+    const quality = document.getElementById('youtubeMp4Quality').value;
+    const response = await fetch(`/youtube/mp4?link=${encodeURIComponent(url)}&quality=${quality}`);
+    const data = await response.json();
+    displayResponse('youtubeMp4Response', data);
+  });
+
+  // YouTube Transcript
+  document.getElementById('youtubeTranscriptForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('youtubeTranscriptUrl').value;
+    const response = await fetch(`/youtube/transcript?link=${encodeURIComponent(url)}`);
+    const data = await response.json();
+    displayResponse('youtubeTranscriptResponse', data);
+  });
+
+  // YouTube Advanced Download
+  document.getElementById('youtubeAdvancedForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('youtubeAdvancedUrl').value;
+    const format = document.getElementById('youtubeAdvancedFormat').value;
+    const response = await fetch(`/youtube/advanced?link=${encodeURIComponent(url)}&format=${format}`);
+    const data = await response.json();
+    displayResponse('youtubeAdvancedResponse', data);
+  });
+
+  // YouTube Channel Info
+  document.getElementById('youtubeChannelForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('youtubeChannelId').value;
+    const response = await fetch(`/youtube/channel?id=${encodeURIComponent(id)}`);
+    const data = await response.json();
+    displayResponse('youtubeChannelResponse', data);
+  });
+</script>
+</body>
+</html>

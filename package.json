@@ -2,9 +2,9 @@
   "name": "wattpad-scraper-api",
   "version": "1.0.0",
   "description": "API for Wattpad Scraper",
-  "main": "src/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^1.7.9",
